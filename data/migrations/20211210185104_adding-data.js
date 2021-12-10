@@ -1,12 +1,12 @@
 exports.up = async function (knex) {
   await knex.schema
-    .createTable("project", (table) => {
+    .createTable("projects", (table) => {
       table.increments("project_id");
       table.string("project_name", 128).notNullable();
       table.string("project_description", 256);
       table.boolean("project_completed").defaultTo(false);
     })
-    .createTable("resource", (table) => {
+    .createTable("resources", (table) => {
       table.increments("resource_id");
       table.string("resource_name", 128).notNullable().unique();
       table.string("resource_description", 256);
@@ -21,7 +21,7 @@ exports.up = async function (knex) {
         .unsigned()
         .notNullable()
         .references("project_id")
-        .inTable("project")
+        .inTable("projects")
         .onDelete("RESTRICT")
         .onUpdate("RESTRICT");
     })
@@ -32,7 +32,7 @@ exports.up = async function (knex) {
         .unsigned()
         .notNullable()
         .references("project_id")
-        .inTable("project")
+        .inTable("projects")
         .onDelete("RESTRICT")
         .onUpdate("RESTRICT");
       table
@@ -40,7 +40,7 @@ exports.up = async function (knex) {
         .unsigned()
         .notNullable()
         .references("resource_id")
-        .inTable("resource")
+        .inTable("resources")
         .onDelete("RESTRICT")
         .onUpdate("RESTRICT");
     });
@@ -48,8 +48,8 @@ exports.up = async function (knex) {
 
 exports.down = async function (knex) {
   await knex.schema
-    .dropTableIfExist("project_resources")
-    .dropTableIfExist("task")
-    .dropTableIfExist("resource")
-    .dropTableIfExist("project");
+    .dropTableIfExists("project_resources")
+    .dropTableIfExists("task")
+    .dropTableIfExists("resources")
+    .dropTableIfExists("projects");
 };
